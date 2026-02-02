@@ -1,0 +1,31 @@
+{
+  "name": "vm-healthcheck",
+  "version": "1.0.0",
+  "description": "VM health monitoring system for Proxmox VMs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && npm test",
+    "start": "node backend/dist/index.js",
+    "db:migrate": "cd backend && npm run migrate",
+    "db:seed": "cd backend && npm run seed"
+  },
+  "keywords": [
+    "proxmox",
+    "monitoring",
+    "vm",
+    "health-check"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  }
+}

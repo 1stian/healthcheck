@@ -1,0 +1,48 @@
+{
+  "name": "vm-healthcheck-backend",
+  "version": "1.0.0",
+  "description": "Backend API for VM health monitoring",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src --ext .ts",
+    "db:migrate": "prisma migrate dev",
+    "db:generate": "prisma generate",
+    "db:seed": "tsx src/scripts/seed.ts"
+  },
+  "keywords": ["proxmox", "monitoring", "vm"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "dotenv": "^16.3.1",
+    "prisma": "^5.0.0",
+    "@prisma/client": "^5.0.0",
+    "axios": "^1.5.0",
+    "redis": "^4.6.10",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "joi": "^17.10.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "pino": "^8.15.1",
+    "pino-pretty": "^10.2.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "tsx": "^3.13.0",
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.5.0",
+    "@types/jest": "^29.5.3",
+    "@typescript-eslint/eslint-plugin": "^6.2.1",
+    "@typescript-eslint/parser": "^6.2.1",
+    "eslint": "^8.45.0",
+    "jest": "^29.6.3",
+    "ts-jest": "^29.1.1"
+  }
+}

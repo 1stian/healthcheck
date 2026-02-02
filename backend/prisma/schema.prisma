@@ -1,0 +1,78 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model VM {
+  id                  String   @id @default(cuid())
+  hostname            String   @unique
+  vmid                String   @unique
+  node                String   // Proxmox node name
+  status              String   @default("unknown") // running, stopped, unknown
+  cpuUsage            Float    @default(0)
+  ramUsage            Float    @default(0)
+  ramTotal            Float    @default(0)
+  diskUsage           Float?
+  diskTotal           Float?
+  uptime              Int      @default(0) // seconds
+  lastHeartbeat       DateTime @default(now())
+  lastReset           DateTime?
+  resetAttempts       Int      @default(0)
+  isDown              Boolean  @default(false)
+  isWarning           Boolean  @default(false)
+  apiKey              String   @unique @default(cuid())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  
+  metrics             VMMetric[]
+  resetHistory        ResetHistory[]
+  
+  @@index([lastHeartbeat])
+  @@index([status])
+  @@index([isDown])
+}
+
+model VMMetric {
+  id                  String   @id @default(cuid())
+  vmId                String
+  vm                  VM       @relation(fields: [vmId], references: [id], onDelete: Cascade)
+  timestamp           DateTime @default(now())
+  cpuUsage            Float
+  ramUsage            Float
+  ramTotal            Float
+  diskUsage           Float?
+  diskTotal           Float?
+  uptime              Int
+  
+  @@index([vmId])
+  @@index([timestamp])
+  @@unique([vmId, timestamp])
+}
+
+model ResetHistory {
+  id                  String   @id @default(cuid())
+  vmId                String
+  vm                  VM       @relation(fields: [vmId], references: [id], onDelete: Cascade)
+  reason              String
+  proxmoxResponse     String?  // JSON stringified response
+  success             Boolean  @default(false)
+  timestamp           DateTime @default(now())
+  
+  @@index([vmId])
+  @@index([timestamp])
+}
+
+model SystemConfig {
+  id                  String   @id @default("default")
+  staleTimeoutMs      Int      @default(300000)  // 5 minutes
+  cpuThreshold        Int      @default(80)      // %
+  ramThreshold        Int      @default(90)      // %
+  autoResetEnabled    Boolean  @default(true)
+  resetRetryCount     Int      @default(3)
+  resetRetryDelayMs   Int      @default(10000)
+  updatedAt           DateTime @updatedAt
+}
